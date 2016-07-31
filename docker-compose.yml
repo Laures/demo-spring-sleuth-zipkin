@@ -1,0 +1,70 @@
+version: '2'
+
+services:
+
+  # run rabbitmq to transport spans within spring
+  rabbitmq:
+    image: rabbitmq:management
+    expose:
+      - 5672
+    ports:
+      - 5672:5672
+      - 15672:15672
+
+  # Run MySQL to store spans
+  storage:
+    image: mysql:5.6.31
+    container_name: mysql
+    ports:
+      - 3306:3306
+    environment:
+      - MYSQL_ROOT_PASSWORD=rootpassword
+      - MYSQL_DATABASE=zipkin
+      - MYSQL_USER=zipkin
+      - MYSQL_PASSWORD=zipkin
+
+  # zipkin ui
+  zipkin:
+    image: com.tigerbooks.techdemo/spring-cloud-sleuth-sample-zipkin-stream:latest
+    ports:
+      - 9411:9411
+    environment:
+      # Point the zipkin at the storage backend
+      - MYSQL_HOST=mysql
+      - RABBIT_HOST=rabbitmq
+      - SPRING_PROFILES_ACTIVE=mysql
+    depends_on:
+      - storage
+      - rabbitmq
+    links:
+      - storage
+      - rabbitmq
+
+  # test client A
+  simple:
+    image: com.tigerbooks.techdemo/spring-cloud-sleuth-sample-stream:latest
+    expose:
+      - 3379
+    ports:
+      - 3379:3379
+    environment:
+      # Point the zipkin at the storage backend
+      - RABBIT_HOST=rabbitmq
+    depends_on:
+      - rabbitmq
+    links:
+      - rabbitmq
+
+  messaging:
+    image: com.tigerbooks.techdemo/spring-cloud-sleuth-sample-messaging:latest
+    expose:
+      - 3381
+    ports:
+      - 3381:3381
+    environment:
+      # Point the zipkin at the storage backend
+      - RABBIT_HOST=rabbitmq
+    depends_on:
+      - rabbitmq
+    links:
+      - rabbitmq

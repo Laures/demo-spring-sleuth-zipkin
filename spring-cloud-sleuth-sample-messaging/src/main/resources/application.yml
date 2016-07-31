@@ -1,0 +1,15 @@
+server:
+  port: 3381
+
+spring:
+  application:
+    name: testSleuthMessaging
+  rabbitmq:
+    host: ${RABBIT_HOST:localhost}
+  sleuth:
+    sampler:
+      percentage: 1.0
+
+sample:
+  zipkin:
+#   enabled: false

@@ -1,0 +1,11 @@
+server:
+  port: 3379
+
+spring:
+  rabbitmq:
+    host: ${RABBIT_HOST:localhost}
+  application:
+    name: testStreamApp
+  sleuth:
+    sampler:
+      percentage: 1.0
