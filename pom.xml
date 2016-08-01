@@ -23,13 +23,14 @@
 
 
     <modules>
+        <module>spring-cloud-sleuth-sample-test-core</module>
+        
         <module>spring-cloud-sleuth-sample-messaging</module>
         <module>spring-cloud-sleuth-sample-websocket</module>
         <module>spring-cloud-sleuth-sample-feign</module>
         <module>spring-cloud-sleuth-sample-zipkin</module>
         <module>spring-cloud-sleuth-sample-stream</module>
         <module>spring-cloud-sleuth-sample-zipkin-stream</module>
-        <module>spring-cloud-sleuth-sample-test-core</module>
     </modules>
 
     <build>
